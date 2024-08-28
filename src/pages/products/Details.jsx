@@ -9,7 +9,6 @@ import { FaStar, FaStarHalf } from "react-icons/fa";
 function ProductDetails() {
   const params = useParams();
 
-  console.log(params);
   const { products, loading } = useSelector((state) => state.product);
 
   const dispatch = useDispatch();

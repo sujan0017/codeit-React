@@ -3,6 +3,7 @@ import navMenu from "../constants/navMenu";
 import logo from "../images/fbLogo.png";
 import { useDispatch, useSelector } from "react-redux";
 import { logOutUser } from "../redux/auth/authSlicer";
+import MiniHeader from "./MiniHeader";
 
 function Header() {
   const { user } = useSelector((state) => state.auth);
@@ -23,8 +24,9 @@ function Header() {
     <>
       {isAuth ? (
         <header className="shadow ">
-          <div className=" flex justify-between items-center px-10 py-4">
-            <div className="w-40">
+          <MiniHeader />
+          <div className=" flex justify-between items-center px-10 py-2">
+            <div className="w-32">
               <Link to="/">
                 <img
                   src={logo}
@@ -47,6 +49,7 @@ function Header() {
                   );
                 })}
               </nav>
+              <p>|</p>
               <button onClick={logOut} className="px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white rounded-md">
                 LogOut
               </button>
