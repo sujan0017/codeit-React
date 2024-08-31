@@ -1,11 +1,7 @@
 import { Link } from "react-router-dom";
 import productImg from "../images/product.jpg";
 
-
 function ProductCard({ id, name, category, brand, price }) {
-
-
-  
   return (
     <div className="bg-slate-200 m-5 p-5 rounded-xl text-center flex flex-col items-center">
       <div className="w-[200px]">

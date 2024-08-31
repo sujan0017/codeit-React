@@ -43,7 +43,7 @@ function ProductsFilter() {
         >
           <option value="">Select Categories</option>
           {categories.map((category) => (
-            <option key={category}>{category}</option>
+            <option className="capitalize" key={category}>{category}</option>
           ))}
         </select>
       </div>

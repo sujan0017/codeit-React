@@ -18,6 +18,8 @@ function Header() {
 
   function logOut (){
     dispatch(logOutUser());
+
+    localStorage.removeItem("authToken")
   }
 
   return (
