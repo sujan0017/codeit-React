@@ -5,6 +5,7 @@ import { toast, ToastContainer } from "react-toastify";
 import Spinner from "./Spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../redux/auth/authActions";
+import { AUTH_ROUTE, REGISTER_ROUTE } from "../constants/routes";
 
 function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -82,8 +83,7 @@ function LoginForm() {
       </div>
       <p className="text-blue-500">Forgot password?</p>
       <div>
-        <Link to="/auth/register">
-          {" "}
+        <Link to={`/${AUTH_ROUTE}/${REGISTER_ROUTE}`}>
           <button className=" bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-700">
             Create new account
           </button>

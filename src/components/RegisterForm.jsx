@@ -5,6 +5,7 @@ import { toast, ToastContainer } from "react-toastify";
 import Spinner from "./Spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../redux/auth/authActions";
+import { AUTH_ROUTE, LOGIN_ROUTE } from "../constants/routes";
 
 function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -12,21 +13,21 @@ function RegisterForm() {
   const { errors } = formState;
   const password = watch("password");
 
-  const {loading, error, user } = useSelector((state)=> state.auth)
+  const { loading, error, user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   function submitForm(data) {
     dispatch(registerUser(data));
   }
 
-  useEffect(()=>{
-    if(user){
+  useEffect(() => {
+    if (user) {
       toast.success("User registered successfully.", { autoClose: 2500 });
     }
-    if(error){
+    if (error) {
       toast.error(error, { autoClose: 2500 });
     }
-  },[error, user])
+  }, [error, user]);
 
   return (
     <form
@@ -118,8 +119,7 @@ function RegisterForm() {
         </button>
       </div>
       <div>
-        <Link to="/auth/login">
-          {" "}
+        <Link to={`/${AUTH_ROUTE}/${LOGIN_ROUTE}`}>
           <button className=" bg-blue-500 text-white py-2 px-6 rounded-lg hover:bg-blue-700 ">
             Login
           </button>

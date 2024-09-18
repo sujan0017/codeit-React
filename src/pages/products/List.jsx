@@ -20,26 +20,33 @@ function ProductList() {
     loading,
     query,
     error,
-    add: { success },
+    add: { success: addSuccess },
+    delete: { success: deleteSuccess },
   } = useSelector((state) => state.product);
 
   useEffect(() => {
     dispatch(getProductList(query));
     dispatch(getProductCategories());
-  }, [dispatch, query, success]);
+  }, [dispatch, query, addSuccess, deleteSuccess]);
 
   useEffect(() => {
-    if (success) {
+    if (addSuccess) {
       setOpenAddModal(false);
-      toast.success("Product added successfully");
+
+      toast.success("Product added successfully.");
     }
+
+    if (deleteSuccess) {
+      toast.success("Product deleted successfully.");
+    }
+    
     if (error) toast.error(error);
-  }, [error, success]);
+  }, [error, addSuccess, deleteSuccess]);
 
   return (
     <div className="px-10 ">
       <div className="flex justify-between py-4">
-        <h1 className="text-center text-2xl "> Product list</h1>
+        <h1 className="text-center text-2xl font-semibold "> Product list</h1>
         <button
           onClick={() => setOpenAddModal(true)}
           className="px-3 py-1 rounded-md shadow-md bg-green-200 hover:bg-green-300"
@@ -50,15 +57,15 @@ function ProductList() {
       <ProductsFilter />
       {loading ? (
         <>
-          <div className="flex items-center justify-center w-full h-[80vh]">
-            <Spinner size={50} />
+          <div className="flex items-center justify-center w-100 h-[70vh]">
+            <Spinner width="12" height="12"/>
           </div>
         </>
       ) : (
         <>
-          <div className="w-full grid grid-cols-4">
-            {products.map((value) => {
-              return <ProductCard key={value.id} {...value} />;
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10 py-5">
+            {products.map((product) => {
+              return <ProductCard key={product.id} {...product} />;
             })}
           </div>
         </>

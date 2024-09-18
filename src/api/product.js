@@ -1,4 +1,3 @@
-
 import api from "./api";
 
 const getList = async ({
@@ -38,4 +37,28 @@ const addProduct = async ({ name, category, brand, price }) => {
   return response;
 };
 
-export { getList, getById, getCategories, addProduct };
+const deleteProduct = async (id) => {
+  const response = await api.delete(`/products/${id}`);
+
+  return response;
+};
+
+const editProduct = async (id, { name, category, brand, price }) => {
+  const response = await api.put(`/products/${id}`, {
+    name,
+    category,
+    brand,
+    price,
+  });
+
+  return response;
+};
+
+export {
+  getList,
+  getById,
+  getCategories,
+  addProduct,
+  deleteProduct,
+  editProduct,
+};

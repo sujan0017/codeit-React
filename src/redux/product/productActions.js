@@ -1,5 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getList, getById, getCategories, addProduct } from "../../api/product";
+import {
+  getList,
+  getById,
+  getCategories,
+  addProduct,
+  deleteProduct,
+  editProduct,
+} from "../../api/product";
 
 const getProductList = createAsyncThunk(
   "product/list",
@@ -26,6 +33,7 @@ const getProductByID = createAsyncThunk(
     }
   }
 );
+
 const getProductCategories = createAsyncThunk(
   "product/categories",
   async (_, { rejectWithValue }) => {
@@ -38,6 +46,7 @@ const getProductCategories = createAsyncThunk(
     }
   }
 );
+
 const addNewProduct = createAsyncThunk(
   "product/add",
   async (data, { rejectWithValue }) => {
@@ -51,4 +60,50 @@ const addNewProduct = createAsyncThunk(
   }
 );
 
-export { getProductList, getProductByID, getProductCategories, addNewProduct };
+const deleteProductById = createAsyncThunk(
+  "product/delete",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await deleteProduct(id);
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data);
+    }
+  }
+);
+const updateProduct = createAsyncThunk(
+  "product/edit",
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await editProduct(data.id, data);
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data);
+    }
+  }
+);
+
+const getRelatedProducts = createAsyncThunk(
+  "product/related",
+  async (query, { rejectWithValue }) => {
+    try {
+      const response = await getList(query ?? {});
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data);
+    }
+  }
+);
+
+export {
+  getProductList,
+  getProductByID,
+  getProductCategories,
+  addNewProduct,
+  deleteProductById,
+  updateProduct,
+  getRelatedProducts,
+};

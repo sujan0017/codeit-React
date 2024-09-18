@@ -2,7 +2,7 @@ const miniMenuLeft = [
     {
       id: 1,
       label: "Offer",
-      route: "/",
+      route: "/offer",
     },
     {
       id: 2,

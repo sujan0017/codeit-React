@@ -1,13 +1,19 @@
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { addNewProduct } from "../redux/product/productActions";
+import { addNewProduct, updateProduct } from "../redux/product/productActions";
 import Spinner from "./Spinner";
 import { useEffect } from "react";
 import { GrAdd } from "react-icons/gr";
+import { BiPencil } from "react-icons/bi";
+import { toast, ToastContainer } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { PRODUCTS_ROUTE } from "../constants/routes";
 
-function AddProductForm() {
+// eslint-disable-next-line react/prop-types
+function AddProductForm({ product }) {
   const {
-    add: { loading, success },
+    add: { loading: addPending, success: addSuccess },
+    edit: { loading: editPending, success: editSuccess },
   } = useSelector((state) => state.product);
 
   const {
@@ -15,18 +21,34 @@ function AddProductForm() {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm();
+  } = useForm({ defaultValues: product ?? {}, disabled: editPending });
 
   const dispatch = useDispatch();
-  
-  function submitForm(data) {
-    dispatch(addNewProduct(data));
 
+  const navigate = useNavigate();
+
+  function submitForm(data) {
+    if (product) {
+      dispatch(updateProduct(data));
+    } else {
+      dispatch(addNewProduct(data));
+    }
   }
 
   useEffect(() => {
-    if(success) reset()
-  }, [success, reset]);
+    if (addSuccess) reset();
+
+    if (editSuccess) {
+      reset();
+
+      toast.success("Product updated successfully.", {
+        autoClose: 1500,
+        onClose: () => {
+          navigate(`/${PRODUCTS_ROUTE}`);
+        },
+      });
+    }
+  }, [reset, addSuccess, editSuccess, navigate]);
 
   return (
     <form
@@ -80,12 +102,24 @@ function AddProductForm() {
       </div>
       <div className="w-full">
         <button
-          className="w-full bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-700 flex justify-center items-center gap-3 "
           type="submit"
+          className={`${
+            product
+              ? "bg-blue-500 hover:bg-blue-600"
+              : "bg-green-600 hover:bg-green-700"
+          } text-white rounded py-2 cursor-pointer w-full flex justify-center items-center`}
         >
-          Add Product {loading ? <Spinner /> : <GrAdd />}
+          <span>{product ? "Edit Product" : "Add Product"}</span>
+          {addPending || editPending ? (
+            <Spinner />
+          ) : product ? (
+            <BiPencil />
+          ) : (
+            <GrAdd />
+          )}
         </button>
       </div>
+      <ToastContainer />
     </form>
   );
 }

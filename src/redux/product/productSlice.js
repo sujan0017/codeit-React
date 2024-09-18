@@ -1,37 +1,61 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {  addNewProduct, getProductByID, getProductCategories, getProductList } from "./productActions";
+import {
+  addNewProduct,
+  deleteProductById,
+  getProductByID,
+  getProductCategories,
+  getProductList,
+  getRelatedProducts,
+  updateProduct,
+} from "./productActions";
 
 const productSlice = createSlice({
   name: "product",
   initialState: {
     products: [],
+    product:{},
     categories: [],
     loading: false,
     error: null,
     query: null,
+    currentPages:1,
+    totalPages:1,
+    relatedProducts: {
+      loading: false,
+      items: [],
+    },
     add: {
       loading: false,
-      success: false 
+      success: false,
+    },
+    delete: {
+      loading: false,
+      success: false,
+    },
+    edit: {
+      loading: false,
+      success: false,
     },
   },
   reducers: {
     setLimit: (state, action) => {
-      state.query = {...state.query, limit: action.payload }
+      state.query = { ...state.query, limit: action.payload };
     },
     setSort: (state, action) => {
-      state.query = {...state.query, sort: action.payload }
+      state.query = { ...state.query, sort: action.payload };
     },
     setFilters: (state, action) => {
-      state.query = {...state.query, filters: action.payload }
+      state.query = { ...state.query, filters: action.payload };
     },
-
   },
   extraReducers: (builder) => {
     builder
       .addCase(getProductList.pending, (state) => {
         state.loading = true;
-        state.error = null;
-        state.add.success= false
+        state.error = null; 
+        state.add.success = false;
+        state.delete.success = false;
+        state.edit.success = false;
       })
       .addCase(getProductList.fulfilled, (state, action) => {
         state.loading = false;
@@ -47,7 +71,7 @@ const productSlice = createSlice({
       })
       .addCase(getProductByID.fulfilled, (state, action) => {
         state.loading = false;
-        state.products = [action.payload];
+        state.product = action.payload;
       })
       .addCase(getProductByID.rejected, (state, action) => {
         state.loading = false;
@@ -76,10 +100,46 @@ const productSlice = createSlice({
       .addCase(addNewProduct.rejected, (state, action) => {
         state.add.loading = false;
         state.error = action.payload;
+      })
+      .addCase(deleteProductById.pending, (state) => {
+        state.delete.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteProductById.fulfilled, (state) => {
+        state.delete.loading = false;
+        state.delete.success = true;
+      })
+      .addCase(deleteProductById.rejected, (state, action) => {
+        state.delete.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(updateProduct.pending, (state) => {
+        state.edit.loading = true;
+        state.error = null;
+      })
+      .addCase(updateProduct.fulfilled, (state) => {
+        state.edit.loading = false;
+        state.edit.success = true;
+      })
+      .addCase(updateProduct.rejected, (state, action) => {
+        state.edit.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(getRelatedProducts.pending, (state) => {
+        state.relatedProducts.loading = true;
+        state.error = null;
+      })
+      .addCase(getRelatedProducts.fulfilled, (state, action) => {
+        state.relatedProducts.loading = false;
+        state.relatedProducts.items = action.payload;
+      })
+      .addCase(getRelatedProducts.rejected, (state, action) => {
+        state.relatedProducts.loading = false;
+        state.error = action.payload;
       });
   },
 });
 
-export const { setLimit, setSort , setFilters} = productSlice.actions;
+export const { setLimit, setSort, setFilters } = productSlice.actions;
 
 export default productSlice.reducer;

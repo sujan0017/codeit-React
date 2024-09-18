@@ -18,24 +18,38 @@ import "react-toastify/dist/ReactToastify.css";
 import AuthLayout from "./layouts/AuthLayout";
 import UnAuthLayout from "./layouts/UnAuthLayout";
 import { useSelector } from "react-redux";
+import EditProduct from "./pages/products/Edit";
+import {
+  ABOUT_ROUTE,
+  AUTH_ROUTE,
+  CONTACT_ROUTE,
+  EDIT_ROUTE,
+  HOME_ROUTE,
+  LOGIN_ROUTE,
+  PRODUCTS_ROUTE,
+  REGISTER_ROUTE,
+} from "./constants/routes";
 
 function App() {
   const { user } = useSelector((state) => state.auth);
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route path="/" element={<MainLayout />}>
+      <Route path={HOME_ROUTE} element={<MainLayout />}>
         <Route element={<AuthLayout user={user} />}>
           <Route index element={<Home />} />
-          <Route path="about" element={<About />} />
-          <Route path="contact" element={<Contact />} />
-          <Route path="products">
+          <Route path={ABOUT_ROUTE} element={<About />} />
+          <Route path={CONTACT_ROUTE} element={<Contact />} />
+
+          <Route path={PRODUCTS_ROUTE}>
             <Route index element={<ProductList />} />
             <Route path=":id" element={<ProductDetails />} />
+            <Route path={`${EDIT_ROUTE}/:id`} element={<EditProduct />} />
           </Route>
         </Route>
-        <Route path="auth" element={<UnAuthLayout user={user} />}>
-          <Route path="login" element={<Login />} />
-          <Route path="register" element={<Register />} />
+
+        <Route path={AUTH_ROUTE} element={<UnAuthLayout user={user} />}>
+          <Route path={LOGIN_ROUTE} element={<Login />} />
+          <Route path={REGISTER_ROUTE} element={<Register />} />
         </Route>
 
         <Route path="*" element={<NotFound />} />
