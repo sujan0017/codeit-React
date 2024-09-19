@@ -6,11 +6,17 @@ import Spinner from "./Spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../redux/auth/authActions";
 import { AUTH_ROUTE, LOGIN_ROUTE } from "../constants/routes";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
 function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
+
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const { register, handleSubmit, formState, watch } = useForm();
+
   const { errors } = formState;
+
   const password = watch("password");
 
   const { loading, error, user } = useSelector((state) => state.auth);
@@ -64,50 +70,54 @@ function RegisterForm() {
       <div className="w-full flex flex-col gap-2    ">
         <div>
           <label htmlFor="password">Password</label>
-          <button
-            className=" text-blue-500 rounded-full ml-4 hover:text-red-500 hover:bg-white"
-            onClick={() => setShowPassword(!showPassword)}
-          >
-            OO
-          </button>
         </div>
         <p className="text-red-500 text-xs">{errors.password?.message}</p>
-        <input
-          className="p-1  border rounded"
-          type={showPassword ? "text" : "password"}
-          {...register("password", {
-            required: "Please enter your password",
-            pattern: {
-              minLength: 8,
-              message:
-                "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character",
-            },
-          })}
-        />
+        <div className="w-full relative">
+          <input
+            className="p-1  border rounded w-full"
+            type={showPassword ? "text" : "password"}
+            {...register("password", {
+              required: "Please enter your password",
+              pattern: {
+                minLength: 8,
+                message:
+                  "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character",
+              },
+            })}
+          />
+          <span
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-5 top-2 cursor-pointer"
+          >
+            {showPassword ? <FiEye /> : <FiEyeOff />}
+          </span>
+        </div>
       </div>
 
       <div className="w-full flex flex-col gap-2    ">
         <div>
           <label htmlFor="confirmPassword">Confirm password</label>
-          <button
-            className=" text-blue-500 rounded-full ml-4 hover:text-red-500 hover:bg-white"
-            onClick={() => setShowPassword(!showPassword)}
-          >
-            OO
-          </button>
         </div>
         <p className="text-red-500 text-xs">
           {errors.confirmPassword?.message}
         </p>
-        <input
-          className="p-1  border rounded"
-          type={showPassword ? "text" : "password"}
-          {...register("confirmPassword", {
-            required: "Please confirm your password",
-            validate: (value) =>
-              value === password || "Your password does not match",
-          })}
-        />
+        <div className="w-full relative">
+          <input
+            className="p-1  border rounded w-full"
+            type={showConfirmPassword ? "text" : "password"}
+            {...register("confirmPassword", {
+              required: "Please confirm your password",
+              validate: (value) =>
+                value === password || "Your password does not match",
+            })}
+          />
+          <span
+            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+            className="absolute right-5 top-2 cursor-pointer"
+          >
+            {showConfirmPassword ? <FiEye /> : <FiEyeOff />}
+          </span>
+        </div>
       </div>
 
       <div className="w-full">

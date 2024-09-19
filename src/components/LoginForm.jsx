@@ -6,6 +6,7 @@ import Spinner from "./Spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../redux/auth/authActions";
 import { AUTH_ROUTE, REGISTER_ROUTE } from "../constants/routes";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
 function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -38,7 +39,7 @@ function LoginForm() {
         <label htmlFor="email">Email</label>
         <p className="text-red-500 text-xs">{errors.email?.message}</p>
         <input
-          className="p-1 border rounded"
+          className="p-1 border rounded "
           type="email"
           {...register("email", {
             required: "Please enter your email",
@@ -50,28 +51,28 @@ function LoginForm() {
         />
       </div>
       <div className="w-full flex flex-col gap-2    ">
-        <div>
-          <label htmlFor="password">Password</label>
+        <label htmlFor="password">Password</label>
+        <p className="text-red-500 text-xs">{errors.password?.message}</p>
+        <div className="w-full relative">
+          <input
+            className="p-1  border rounded w-full "
+            type={showPassword ? "text" : "password"}
+            {...register("password", {
+              required: "Please enter your password",
+              pattern: {
+                minLength: 8,
+                message:
+                  "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character",
+              },
+            })}
+          />
           <span
-            className=" text-blue-500 rounded-full ml-4 hover:text-red-500 hover:bg-white hover:cursor-pointer"
             onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-5 top-2 cursor-pointer"
           >
-            OO
+            {showPassword ? <FiEye /> : <FiEyeOff />}
           </span>
         </div>
-        <p className="text-red-500 text-xs">{errors.password?.message}</p>
-        <input
-          className="p-1  border rounded"
-          type={showPassword ? "text" : "password"}
-          {...register("password", {
-            required: "Please enter your password",
-            pattern: {
-              minLength: 8,
-              message:
-                "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character",
-            },
-          })}
-        />
       </div>
       <div className="w-full">
         <button
