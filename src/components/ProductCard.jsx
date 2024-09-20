@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import productImg from "../images/product.jpg";
-import { BiCartAdd, BiPencil, BiTrash } from "react-icons/bi";
+import { BiCart, BiPencil, BiTrash } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteProductById } from "../redux/product/productActions";
 import { useState } from "react";
@@ -14,7 +14,7 @@ const ProductCard = ({ id, name, category, brand, price }) => {
   const [showDeletePopup, setShowDeletePopup] = useState(false);
 
   const { user } = useSelector((state) => state.auth);
-  console.log(user);
+  
 
   const adminUser = user.roles.includes("ADMIN");
 
@@ -36,65 +36,68 @@ const ProductCard = ({ id, name, category, brand, price }) => {
     dispatch(addProductToCart({ id, name, category, brand, price }));
   }
   return (
-    <div className="bg-slate-200 m-5 p-5 rounded-xl text-center flex flex-col items-center">
-      <div className="w-[200px]">
-        <img src={productImg} alt="product image" className="w-full" />
-      </div>
-      <h2 className="text-2xl font-semibold mb-3">{name}</h2>
-      <p>{category}</p>
-      <p>{brand}</p>
-      <p className="text-yellow-600 my-3">${price}</p>
-      <div className="w-full flex justify-between">
-        <Link
-          to={`${id}`}
-          className="py-2 px-4 bg-orange-500 rounded-md text-white"
-        >
-          Shop Now
-        </Link>
-        <div className="flex gap-2">
+    <div className="px-5 py-10 rounded-xl text-center shadow-md border bg-white">
+    <img src={productImg} alt="headphone" className="h-24 w-auto mx-auto" />
+    <div className="rounded-2xl bg-green-500 px-2 w-max mx-auto mt-5">
+      {category}
+    </div>
+    <h2 className="text-3xl font-semibold mb-3">{name}</h2>
+    <div>{brand}</div>
+    <div className={`text-xl text-yellow-600 mb-3`}>${price}</div>
+    <div className="flex justify-between items-center">
+      <Link to={`${id}`} className="text-white bg-black px-5 py-2 rounded">
+        Shop Now
+      </Link>
+      {user ? (
+        <div className="flex">
           <button
+            className="text-white bg-green-700 p-3 rounded ml-2"
             onClick={addToCart}
-            className="text-white bg-green-700 py-2 px-3 rounded-md flex items-center"
           >
-            <BiCartAdd className="text-xl" />
+            <BiCart />
           </button>
-
           <Link
             to={`/${PRODUCTS_ROUTE}/${EDIT_ROUTE}/${id}`}
-            className="text-white bg-blue-500 py-2 px-3 rounded-md flex items-center"
+            className="text-white bg-blue-500 p-3 rounded ml-2"
           >
             <BiPencil />
           </Link>
-          {adminUser ? (
-            <button
-              onClick={deleteProduct}
-              className="text-white bg-red-500 py-2 px-3 rounded-md"
-            >
-              <BiTrash />
-            </button>
-          ) : null}
-        </div>
-      </div>
-      <Modal
-        isOpen={showDeletePopup}
-        setIsOpen={setShowDeletePopup}
-        title="Delete product"
-        content={
-          <div className="flex justify-start">
-            Are you sure you want to delete this product?
-          </div>
-        }
-        actions={
-          <button
-            onClick={confirmDeleteProduct}
-            className="bg-red-500 text-white py-2 px-4 rounded flex items-center hover:bg-red-700"
+         {adminUser?  <button
+            className="text-white bg-red-500 p-3 rounded ml-2"
+            onClick={deleteProduct}
           >
-            <span className="mr-2">Delete</span>{" "}
-            {loading ? <Spinner className="text-xl" /> : <BiTrash />}
-          </button>
-        }
-      />
+            <BiTrash />
+          </button>: <></>}
+        </div>
+      ) : (
+        <button
+          className="text-white bg-green-700 p-3 rounded ml-2"
+          onClick={addToCart}
+        >
+          <BiCart />
+        </button>
+      )}
     </div>
+    <Modal
+      isOpen={showDeletePopup}
+      setIsOpen={setShowDeletePopup}
+      title="Delete Product"
+      content={
+        <div className="flex justify-start">
+          Are you sure you want to delete this product?
+        </div>
+      }
+      actions={
+        <button
+          className="bg-red-500 text-white py-2 px-5 rounded flex items-center"
+          onClick={confirmDeleteProduct}
+        >
+          <span className="mr-2">Delete</span>
+          {loading ? <Spinner /> : <BiTrash className="text-xl" />}
+        </button>
+      }
+    />
+  </div>
   );
 };
 

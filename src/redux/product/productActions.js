@@ -6,6 +6,7 @@ import {
   addProduct,
   deleteProduct,
   editProduct,
+  getTotal,
 } from "../../api/product";
 
 const getProductList = createAsyncThunk(
@@ -98,6 +99,20 @@ const getRelatedProducts = createAsyncThunk(
   }
 );
 
+const getTotalProducts = createAsyncThunk(
+  "product/total",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await getTotal();
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data);
+    }
+  }
+);
+
+
 export {
   getProductList,
   getProductByID,
@@ -106,4 +121,5 @@ export {
   deleteProductById,
   updateProduct,
   getRelatedProducts,
+  getTotalProducts
 };

@@ -4,8 +4,9 @@ const getList = async ({
   filters = {},
   sort = { createdAt: -1 },
   limit = 10,
+  page = 1,
 }) => {
-  const query = `limit=${limit}&offset=0&sort=${JSON.stringify(
+  const query = `limit=${limit}&page=${page}&sort=${JSON.stringify(
     sort
   )}&filters=${JSON.stringify(filters)}`;
 
@@ -53,6 +54,11 @@ const editProduct = async (id, { name, category, brand, price }) => {
 
   return response;
 };
+const getTotal = async () => {
+  const response = await api.get(`/products/total`);
+
+  return response;
+};
 
 export {
   getList,
@@ -61,4 +67,5 @@ export {
   addProduct,
   deleteProduct,
   editProduct,
+  getTotal
 };

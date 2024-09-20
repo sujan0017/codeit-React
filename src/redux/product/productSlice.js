@@ -6,6 +6,7 @@ import {
   getProductCategories,
   getProductList,
   getRelatedProducts,
+  getTotalProducts,
   updateProduct,
 } from "./productActions";
 
@@ -13,13 +14,12 @@ const productSlice = createSlice({
   name: "product",
   initialState: {
     products: [],
-    product:{},
+    product: {},
     categories: [],
     loading: false,
     error: null,
     query: null,
-    currentPages:1,
-    totalPages:1,
+    total: 0,
     relatedProducts: {
       loading: false,
       items: [],
@@ -47,12 +47,17 @@ const productSlice = createSlice({
     setFilters: (state, action) => {
       state.query = { ...state.query, filters: action.payload };
     },
+    setPage: (state, action) => {
+    
+
+      state.query = { ...state.query, page:action.payload };
+    },
   },
   extraReducers: (builder) => {
     builder
       .addCase(getProductList.pending, (state) => {
         state.loading = true;
-        state.error = null; 
+        state.error = null;
         state.add.success = false;
         state.delete.success = false;
         state.edit.success = false;
@@ -136,10 +141,14 @@ const productSlice = createSlice({
       .addCase(getRelatedProducts.rejected, (state, action) => {
         state.relatedProducts.loading = false;
         state.error = action.payload;
+      })
+      .addCase(getTotalProducts.fulfilled, (state, action) => {
+        state.total = action.payload.total;
       });
   },
 });
 
-export const { setLimit, setSort, setFilters } = productSlice.actions;
+export const { setLimit, setSort, setFilters, setPage } =
+  productSlice.actions;
 
 export default productSlice.reducer;

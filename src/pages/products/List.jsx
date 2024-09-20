@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getProductCategories,
   getProductList,
+  getTotalProducts,
 } from "../../redux/product/productActions";
 import Modal from "../../components/Modal";
 import AddProductForm from "../../components/AddProductForm";
@@ -27,6 +28,7 @@ function ProductList() {
   useEffect(() => {
     dispatch(getProductList(query));
     dispatch(getProductCategories());
+    dispatch(getTotalProducts());
   }, [dispatch, query, addSuccess, deleteSuccess]);
 
   useEffect(() => {
@@ -39,9 +41,11 @@ function ProductList() {
     if (deleteSuccess) {
       toast.success("Product deleted successfully.");
     }
-    
+
     if (error) toast.error(error);
   }, [error, addSuccess, deleteSuccess]);
+
+
 
   return (
     <div className="px-10 ">
@@ -58,7 +62,7 @@ function ProductList() {
       {loading ? (
         <>
           <div className="flex items-center justify-center w-100 h-[70vh]">
-            <Spinner width="12" height="12"/>
+            <Spinner width="12" height="12" />
           </div>
         </>
       ) : (
